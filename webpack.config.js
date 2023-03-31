@@ -6,29 +6,29 @@ module.exports = {
   mode: 'development',
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: 'index_bundle.js',
+    filename: 'index_bundle.js'
   },
   target: 'web',
   devServer: {
-    port: '5000',
+    port: '3001',
     static: {
       directory: path.join(__dirname, 'public')
-},
+    },
     open: false,
     hot: true,
-    liveReload: true,
+    liveReload: true
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json'],
+    extensions: ['.js', '.jsx', '.json']
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/, 
-        exclude: /node_modules/, 
-        use: 'babel-loader', 
-      },
-    ],
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: 'babel-loader'
+      }
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
