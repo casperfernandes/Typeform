@@ -1,4 +1,7 @@
+import { useContext } from 'react';
 import styled from 'styled-components'
+
+import { appContext } from '../appContext/AppProvider';
 
 const WrapperDiv = styled.div`
     position: fixed;
@@ -15,13 +18,22 @@ const WrapperDiv = styled.div`
     .highlighted {
         height: 100%;
         background-color: #0077ff;
+
+        ${props => `
+        width: ${props.percentCompleted || 0}%;
+        `};
     }
 `
 
 function ProgressBar() {
+    const {
+        state: { fieldsViewedWithValue, totalFields }
+    } = useContext(appContext);
+
+    const percentCompleted = (fieldsViewedWithValue / totalFields * 100) || 0;
 
     return (
-        <WrapperDiv>
+        <WrapperDiv percentCompleted={percentCompleted}>
             <div className="non-highlighted">
                 <div className="highlighted" />
             </div>
