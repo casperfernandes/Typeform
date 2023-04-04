@@ -3,7 +3,7 @@ import INDUSTRIES from './constants/Industries';
 
 import { getFromLocalStorage } from './services/StorageService';
 
-function Form() {
+function Form(countries) {
   const formValue = getFromLocalStorage(STORAGE_KEYS.form) || {};
   const { firstName, currentRole } = formValue;
 
@@ -159,7 +159,8 @@ function Form() {
       description: <p>We won't call you unless it is absolutely required to process your application.</p>,
       fieldName: 'phone',
       fieldType: FIELD_TYPE.phoneField,
-      defaultValue: { code: '', number: '' },
+      defaultValue: { code: 'in', number: '' },
+      countries,
       isRequired: true,
       buttonText: 'Submit',
       helperText: (

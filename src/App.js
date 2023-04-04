@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 
 import { STORAGE_KEYS } from './constants/Miscellaneous';
@@ -32,8 +33,36 @@ function App() {
   const { dispatch } = useContext(appContext);
 
   const [nextFieldIndex, setNextFieldIndex] = useState(0);
+  const [countries, setCountries] = useState(null);
 
-  const formContent = Form();
+  async function getCountryFlags() {
+    try {
+      const countryResponse = await axios({
+        url: 'https://flagcdn.com/en/codes.json',
+        method: 'GET'
+      });
+
+      const countryObj = countryResponse?.data || {};
+
+      const countries = {};
+      Object.keys(countryObj).forEach(code => {
+        countries[code] = {
+          name: countryObj[code],
+          flagUrl: `https://flagcdn.com/h24/${code}.png`
+        };
+      });
+
+      setCountries(countries);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getCountryFlags();
+  }, []);
+
+  const formContent = Form(countries);
 
   useEffect(() => {
     // On page load, update local storage values with latest form structure
