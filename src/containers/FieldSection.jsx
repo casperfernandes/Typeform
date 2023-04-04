@@ -13,7 +13,17 @@ function FieldSection(props) {
   const {
     isFieldInView,
     onSubmit,
-    formDetails: { fieldName, fieldType, defaultValue, options, buttonText, helperText, allowOnlyNumbers, allowSelectionCount }
+    formDetails: {
+      fieldName,
+      fieldType,
+      defaultValue,
+      options,
+      buttonText,
+      helperText,
+      allowOnlyNumbers,
+      allowSelectionCount,
+      countries
+    }
   } = props;
 
   const [error, setError] = useState('');
@@ -82,6 +92,7 @@ function FieldSection(props) {
             fieldValue={fieldValue}
             defaultValue={defaultValue}
             onFieldChange={onFieldChange}
+            countries={countries}
             isFieldInView={isFieldInView}
             error={error}
             setError={setError}
