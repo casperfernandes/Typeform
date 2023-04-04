@@ -5,7 +5,25 @@ import { getFromLocalStorage } from './services/StorageService';
 
 function Form() {
   const formValue = getFromLocalStorage(STORAGE_KEYS.form) || {};
-  const { firstName } = formValue;
+  const { firstName, currentRole } = formValue;
+
+  function renderGoalOptions() {
+    if (currentRole?.includes(1)) {
+      return [
+        { value: 1, label: 'Structured approach to growth' },
+        { value: 2, label: 'Build a growth team' },
+        { value: 3, label: 'Connect with like-minded people' }
+      ];
+    }
+
+    return [
+      { value: 4, label: 'Get hired' },
+      { value: 5, label: 'Get promoted' },
+      { value: 3, label: 'Connect with like-minded people' },
+      { value: 1, label: 'Structured approach to growth' },
+      { value: 2, label: 'Build a growth team' }
+    ];
+  }
 
   return [
     {
@@ -48,7 +66,7 @@ function Form() {
       )
     },
     {
-      question: <span>and your last name, c?*</span>,
+      question: <span>and your last name, {firstName}?*</span>,
       fieldName: 'lastName',
       fieldType: FIELD_TYPE.textField,
       defaultValue: '',
@@ -84,6 +102,13 @@ function Form() {
       fieldName: 'currentRole',
       fieldType: FIELD_TYPE.checkbox,
       allowSelectionCount: 1,
+      options: [
+        { value: 1, label: 'Founder or CXO' },
+        { value: 2, label: 'Product Team' },
+        { value: 3, label: 'Marketing Team' },
+        { value: 4, label: 'VC' },
+        { value: 5, label: 'Other' }
+      ],
       defaultValue: [],
       isRequired: true,
       buttonText: 'Ok'
@@ -93,6 +118,7 @@ function Form() {
       fieldName: 'goals',
       fieldType: FIELD_TYPE.checkbox,
       allowSelectionCount: 2,
+      options: renderGoalOptions(),
       defaultValue: [],
       isRequired: true,
       buttonText: 'Ok'
@@ -133,7 +159,7 @@ function Form() {
       description: <p>We won't call you unless it is absolutely required to process your application.</p>,
       fieldName: 'phone',
       fieldType: FIELD_TYPE.phoneField,
-      defaultValue: '',
+      defaultValue: { code: '', number: '' },
       isRequired: true,
       buttonText: 'Submit',
       helperText: (
