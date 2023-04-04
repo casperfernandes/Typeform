@@ -6,12 +6,14 @@ import CustomInputField from '../components/CustomInputField';
 import CustomSelectDropdown from '../components/CustomSelectDrowdown';
 import SubmitButton from '../components/SubmitButton';
 import { useState } from 'react';
+import CustomCheckbox from '../components/CustomCheckbox';
+import CustomPhoneField from '../components/CustomPhoneField';
 
 function FieldSection(props) {
   const {
     isFieldInView,
     onSubmit,
-    formDetails: { fieldName, fieldType, defaultValue, options, buttonText, helperText, allowOnlyNumbers }
+    formDetails: { fieldName, fieldType, defaultValue, options, buttonText, helperText, allowOnlyNumbers, allowSelectionCount }
   } = props;
 
   const [error, setError] = useState('');
@@ -59,8 +61,32 @@ function FieldSection(props) {
         );
 
       case FIELD_TYPE.checkbox:
+        return (
+          <CustomCheckbox
+            fieldName={fieldName}
+            fieldValue={fieldValue}
+            defaultValue={defaultValue}
+            onFieldChange={onFieldChange}
+            options={options}
+            allowSelectionCount={allowSelectionCount}
+            isFieldInView={isFieldInView}
+            error={error}
+            setError={setError}
+          />
+        );
+
       case FIELD_TYPE.phoneField:
-        return null;
+        return (
+          <CustomPhoneField
+            fieldName={fieldName}
+            fieldValue={fieldValue}
+            defaultValue={defaultValue}
+            onFieldChange={onFieldChange}
+            isFieldInView={isFieldInView}
+            error={error}
+            setError={setError}
+          />
+        );
 
       default:
         return null;
