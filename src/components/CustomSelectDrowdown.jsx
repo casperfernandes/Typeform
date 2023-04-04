@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { appContext } from '../appContext/AppProvider';
-import ErrorComponent from './ErrorComponent';
 
 const Wrapper = styled.div`
   .dropdown-parent {
@@ -44,22 +43,25 @@ const Wrapper = styled.div`
 `;
 
 function CustomSelectDropdown(props) {
-  const { fieldName, fieldValue, defaultValue, onFieldChange, options, isFieldInView, onSubmit, error, setError } = props;
+  const { fieldName, fieldValue, defaultValue, onFieldChange, options, isFieldInView, handleSubmit, error, setError } = props;
 
   const {
     state: { fieldsViewedWithValue },
     dispatch
   } = useContext(appContext);
 
-  const [searchValue, setSearchValue] = useState(fieldValue?.label || '');
+  const [searchValue, setSearchValue] = useState(fieldValue?.[0]?.label || '');
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredOptions, setFilteredOptions] = useState(options);
+  const [isOptionSelected, setIsOptionSelected] = useState(!!fieldValue?.length);
 
   const inputRef = useRef();
   const dropdownRef = useRef();
+  const modifyProgressBarRef = useRef(true);
 
   function handleSearchChange(event) {
     onFieldChange({ [fieldName]: defaultValue });
+    setIsOptionSelected(false);
     setSearchValue(event.target.value);
   }
 
@@ -79,10 +81,11 @@ function CustomSelectDropdown(props) {
     return function eventFunction() {
       const { label, value } = option;
 
-      onFieldChange({ [fieldName]: { id: value, label } });
+      onFieldChange({ [fieldName]: [{ id: value, label }] });
       setSearchValue(label);
       setShowDropdown(false);
-      onSubmit();
+      setIsOptionSelected(true);
+      handleSubmit();
     };
   }
 
@@ -90,6 +93,7 @@ function CustomSelectDropdown(props) {
     onFieldChange({ [fieldName]: defaultValue });
     setSearchValue('');
     setShowDropdown(false);
+    setIsOptionSelected(false);
   }
 
   useEffect(() => {
@@ -98,16 +102,27 @@ function CustomSelectDropdown(props) {
     }
   }, [isFieldInView]);
 
-  // useEffect(() => {
-  //     if (isFieldInView) {
-  //         // Only if element is in view, modify progress bar
-  //         if (!fieldValue && fieldsViewedWithValue) {
-  //             dispatch({ type: 'setFieldsViewedWithValue', payload: fieldsViewedWithValue - 1 });
-  //         } else if (fieldValue) {
-  //             dispatch({ type: 'setFieldsViewedWithValue', payload: fieldsViewedWithValue + 1 });
-  //         }
-  //     }
-  // }, [isFieldInView, fieldValue, fieldsViewedWithValue, dispatch]);
+  useEffect(() => {
+    if (isFieldInView) {
+      // Only if element is in view, modify progress bar
+      // Ref used to prevent multiple useEffect calls because of fieldsViewedWithValue being updated
+      if (!isOptionSelected && fieldsViewedWithValue && !modifyProgressBarRef.current) {
+        dispatch({
+          type: 'setFieldsViewedWithValue',
+          payload: fieldsViewedWithValue - 1
+        });
+
+        modifyProgressBarRef.current = true;
+      } else if (isOptionSelected && modifyProgressBarRef.current) {
+        dispatch({
+          type: 'setFieldsViewedWithValue',
+          payload: fieldsViewedWithValue + 1
+        });
+
+        modifyProgressBarRef.current = false;
+      }
+    }
+  }, [isFieldInView, isOptionSelected, fieldsViewedWithValue, dispatch]);
 
   useEffect(() => {
     const handleClickOutside = event => {
@@ -120,6 +135,7 @@ function CustomSelectDropdown(props) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
+      setShowDropdown(false);
     }
 
     return () => {
@@ -172,7 +188,7 @@ function CustomSelectDropdown(props) {
           </button>
         )}
 
-        {showDropdown && filteredOptions?.length && !error ? (
+        {showDropdown && filteredOptions?.length ? (
           <div className="dropdown-parent">
             <ul role="listbox">
               {filteredOptions.map(item => (
@@ -184,9 +200,7 @@ function CustomSelectDropdown(props) {
               ))}
             </ul>
           </div>
-        ) : (
-          <ErrorComponent message={error} />
-        )}
+        ) : null}
       </div>
     </Wrapper>
   );

@@ -4,7 +4,7 @@ import { useContext, useRef, useState } from 'react';
 import { appContext } from '../appContext/AppProvider';
 
 function CustomInputField(props) {
-  const { fieldName, fieldValue = '', defaultValue, onFieldChange, isFieldInView } = props;
+  const { fieldName, fieldValue = '', defaultValue, onFieldChange, isFieldInView, error, setError } = props;
 
   const {
     state: { fieldsViewedWithValue },
@@ -31,12 +31,14 @@ function CustomInputField(props) {
           type: 'setFieldsViewedWithValue',
           payload: fieldsViewedWithValue - 1
         });
+
         modifyProgressBarRef.current = true;
       } else if (textValue && modifyProgressBarRef.current) {
         dispatch({
           type: 'setFieldsViewedWithValue',
           payload: fieldsViewedWithValue + 1
         });
+
         modifyProgressBarRef.current = false;
       }
     }
@@ -45,6 +47,7 @@ function CustomInputField(props) {
   function handleInputChange(event) {
     const value = event.target.value;
     onFieldChange({ [event.target.name]: value });
+    setError('');
     setTextValue(value);
   }
 

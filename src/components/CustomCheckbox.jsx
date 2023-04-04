@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { appContext } from '../appContext/AppProvider';
 
 const Wrapper = styled.div`
   color: white;
@@ -71,16 +72,46 @@ function CustomCheckbox(props) {
     onFieldChange,
     options = [],
     isFieldInView,
-    allowSelectionCount
+    requiredSelectionCount,
+    setError
   } = props;
+
+  const {
+    state: { fieldsViewedWithValue },
+    dispatch
+  } = useContext(appContext);
 
   const [checkedValues, setCheckedValues] = useState(fieldValue || defaultValue);
 
-  const isDisableOptions = checkedValues?.length === allowSelectionCount;
+  const modifyProgressBarRef = useRef(true);
+
+  const isDisableOptions = checkedValues?.length === requiredSelectionCount;
 
   useEffect(() => {
     onFieldChange({ [fieldName]: [...checkedValues] });
   }, [checkedValues, fieldName]);
+
+  useEffect(() => {
+    if (isFieldInView) {
+      // Only if element is in view, modify progress bar
+      // Ref used to prevent multiple useEffect calls because of fieldsViewedWithValue being updated
+      if (!checkedValues?.length && fieldsViewedWithValue && !modifyProgressBarRef.current) {
+        dispatch({
+          type: 'setFieldsViewedWithValue',
+          payload: fieldsViewedWithValue - 1
+        });
+
+        modifyProgressBarRef.current = true;
+      } else if (checkedValues?.length && modifyProgressBarRef.current) {
+        dispatch({
+          type: 'setFieldsViewedWithValue',
+          payload: fieldsViewedWithValue + 1
+        });
+
+        modifyProgressBarRef.current = false;
+      }
+    }
+  }, [isFieldInView, checkedValues, fieldsViewedWithValue, dispatch]);
 
   function handleCheckboxChange(event) {
     const isChecked = event.target.checked;
@@ -95,15 +126,17 @@ function CustomCheckbox(props) {
         return updated;
       });
     }
+
+    setError(false);
   }
 
   function renderSelectionsRemaining() {
     if (!checkedValues?.length) {
-      return `Choose ${allowSelectionCount}`;
+      return `Choose ${requiredSelectionCount}`;
     }
 
-    if (checkedValues?.length < allowSelectionCount) {
-      return `Choose ${allowSelectionCount - checkedValues.length} more`;
+    if (checkedValues?.length < requiredSelectionCount) {
+      return `Choose ${requiredSelectionCount - checkedValues.length} more`;
     }
 
     return '';
@@ -111,13 +144,12 @@ function CustomCheckbox(props) {
 
   return (
     <Wrapper>
-      {allowSelectionCount > 1 ? <div className="remaining-selection">{renderSelectionsRemaining()}</div> : null}
+      {requiredSelectionCount > 1 ? <div className="remaining-selection">{renderSelectionsRemaining()}</div> : null}
 
       <div>
         {options.map(item => {
           const { label, value } = item;
           const isChecked = checkedValues.includes(value);
-          console.log(label, isChecked);
 
           return (
             <div key={`${label}_${value}}`} className="option">
