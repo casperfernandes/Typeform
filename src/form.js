@@ -51,6 +51,7 @@ function Form(countries) {
         </>
       )
     },
+
     {
       question: <span>What's your first name?*</span>,
       fieldName: 'firstName',
@@ -65,6 +66,7 @@ function Form(countries) {
         </>
       )
     },
+
     {
       question: <span>and your last name, {firstName}?*</span>,
       fieldName: 'lastName',
@@ -79,16 +81,18 @@ function Form(countries) {
         </>
       )
     },
+
     {
       question: <span>What industry is your company in?*</span>,
       description: <p>We will personalize your learning experience accordingly</p>,
       fieldName: 'industryName',
       fieldType: FIELD_TYPE.selectDropdown,
-      defaultValue: null,
+      defaultValue: [],
       options: INDUSTRIES,
       isRequired: true,
       buttonText: 'Ok'
     },
+
     {
       question: <span>Your role in your company?*</span>,
       description: <p>We want to understand how you spend your time right now.</p>,
@@ -101,7 +105,7 @@ function Form(countries) {
       ),
       fieldName: 'currentRole',
       fieldType: FIELD_TYPE.checkbox,
-      allowSelectionCount: 1,
+      requiredSelectionCount: 1,
       options: [
         { value: 1, label: 'Founder or CXO' },
         { value: 2, label: 'Product Team' },
@@ -113,16 +117,18 @@ function Form(countries) {
       isRequired: true,
       buttonText: 'Ok'
     },
+
     {
       question: <span>{firstName}, what's your professional goal for the next 12 months?*</span>,
       fieldName: 'goals',
       fieldType: FIELD_TYPE.checkbox,
-      allowSelectionCount: 2,
+      requiredSelectionCount: 2,
       options: renderGoalOptions(),
       defaultValue: [],
       isRequired: true,
       buttonText: 'Ok'
     },
+
     {
       question: <span>Email you'd like to register with?*</span>,
       description: (
@@ -143,8 +149,8 @@ function Form(countries) {
       ),
       fieldName: 'email',
       fieldType: FIELD_TYPE.textField,
-      isEmail: true,
       defaultValue: '',
+      isEmail: true,
       isRequired: true,
       buttonText: 'Ok',
       helperText: (
@@ -154,6 +160,7 @@ function Form(countries) {
         </>
       )
     },
+
     {
       question: <span>Your phone number?*</span>,
       description: <p>We won't call you unless it is absolutely required to process your application.</p>,
@@ -161,6 +168,7 @@ function Form(countries) {
       fieldType: FIELD_TYPE.phoneField,
       defaultValue: { code: 'in', number: '' },
       countries,
+      isPhone: true,
       isRequired: true,
       buttonText: 'Submit',
       helperText: (
