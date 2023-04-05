@@ -12,12 +12,23 @@ const Wrapper = styled.div`
   z-index: 50;
   background: rgb(0, 0, 0);
   pointer-events: auto;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 2px solid rgb(255, 255, 255);
   box-sizing: border-box;
   border-radius: 8px;
   padding: 5px 16px 16px 16px;
   color: white;
-  /* height: 100%; */
+  top: 0;
+  left: 0;
+
+  .input-field {
+    color: white;
+    padding: 0px 0px 8px;
+    background: none;
+    border: none;
+    outline: none;
+    transform: translateZ(0px);
+    font-size: 30px;
+  }
 
   .options {
     position: relative;
@@ -36,7 +47,7 @@ const Wrapper = styled.div`
     transition-duration: 0.1s;
     transition-property: background-color, color, border-color, opacity, box-shadow;
     transition-timing-function: ease-out;
-    width: 100%;
+    /* width: 100%; */
     cursor: pointer;
     opacity: 1;
     margin-bottom: 4px;
@@ -70,6 +81,7 @@ function CountryCodeModal(props) {
   const [filteredOptions, setFilteredOptions] = useState(renderInitialOptions());
 
   const childRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = event => {
@@ -79,6 +91,10 @@ function CountryCodeModal(props) {
     };
 
     document.addEventListener('mousedown', handleClickOutside);
+
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -126,7 +142,14 @@ function CountryCodeModal(props) {
   return (
     <Modal>
       <Wrapper ref={childRef}>
-        <input type="text" value={searchValue} onChange={handleSearchChange} />
+        <input
+          ref={inputRef}
+          className="input-field"
+          placeholder="Search countries"
+          type="text"
+          value={searchValue}
+          onChange={handleSearchChange}
+        />
 
         {filteredOptions?.length && !error ? (
           <div role="listbox">

@@ -18,8 +18,8 @@ const WrapperDiv = styled.div`
   background-color: black;
 
   .singleField {
-    display: grid;
-    place-content: center;
+    display: flex;
+    align-items: center;
     max-width: 720px;
     margin: 0px auto;
     height: 100vh;

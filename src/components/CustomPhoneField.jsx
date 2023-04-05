@@ -5,7 +5,48 @@ import { appContext } from '../appContext/AppProvider';
 
 import CountryCodeModal from '../containers/CountryCodeModal';
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  color: white;
+  position: relative;
+
+  .inputField {
+    color: white;
+    padding: 0px 0px 8px;
+    background: none;
+    border: none;
+    outline: none;
+    transform: translateZ(0px);
+    font-size: 30px;
+    box-shadow: rgba(255, 255, 255, 0.3) 0px 1px;
+
+    :focus {
+      box-shadow: rgb(255, 255, 255) 0px 2px;
+    }
+  }
+
+  button {
+    background: none;
+    border: none;
+    box-shadow: rgba(255, 255, 255, 0.3) 0px 1px;
+    padding: 0px 0px 13px 0px;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 30px;
+    margin-right: 15px;
+    cursor: pointer;
+  }
+
+  img {
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 4px;
+    box-shadow: rgba(255, 255, 255, 0.6) 0px 0px 0px 1px;
+  }
+`;
 
 function CustomPhoneField(props) {
   const { fieldName, fieldValue, defaultValue, onFieldChange, countries, isFieldInView, setError } = props;
@@ -77,7 +118,7 @@ function CustomPhoneField(props) {
         <i className="fa fa-angle-down" aria-hidden="true"></i>
       </button>
 
-      <input type="tel" name={fieldName} value={phone} onChange={handlePhoneChange} />
+      <input className="inputField" type="tel" name={fieldName} value={phone} onChange={handlePhoneChange} />
     </Wrapper>
   );
 }

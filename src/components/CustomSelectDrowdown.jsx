@@ -3,10 +3,47 @@ import styled from 'styled-components';
 import { appContext } from '../appContext/AppProvider';
 
 const Wrapper = styled.div`
+  position: relative;
+  color: rgb(255, 255, 255);
+
+  input {
+    width: 100%;
+    padding: 0px 0px 8px;
+    fill: none;
+    border: none;
+    outline: none;
+    border-radius: 0px;
+    transform: translateZ(0px);
+    font-size: 30px;
+    -webkit-font-smoothing: antialiased;
+    line-height: unset;
+    -webkit-text-fill-color: rgb(255, 255, 255);
+    /* animation: 1ms ease 0s 1 normal none running native-autofill-in; */
+    transition: background-color 1e8s ease 0s, box-shadow 0.1s ease-out 0s;
+    box-shadow: rgba(255, 255, 255, 0.3) 0px 1px;
+    background: transparent !important;
+
+    :focus {
+      box-shadow: rgb(255, 255, 255) 0px 2px;
+    }
+  }
+
+  button {
+    position: absolute;
+    right: 0px;
+    top: 2px;
+    bottom: 0px;
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: inherit;
+  }
+
   .dropdown-parent {
     z-index: 30;
     position: absolute;
     width: 100%;
+    background-color: black;
   }
 
   ul {
@@ -26,7 +63,6 @@ const Wrapper = styled.div`
     border-radius: var(--sampler-theme-border-radius);
     background-color: rgb(26, 26, 26);
     box-shadow: rgba(255, 255, 255, 0.6) 0px 0px 0px 1px inset;
-    color: rgb(255, 255, 255);
     max-width: 100%;
     min-width: 75px;
     min-height: 40px;
@@ -170,38 +206,38 @@ function CustomSelectDropdown(props) {
   }, [searchValue, options, setError]);
 
   return (
-    <Wrapper>
-      <div ref={dropdownRef}>
-        <input ref={inputRef} onClick={handleOpenOptions(true)} value={searchValue} onChange={handleSearchChange} />
+    <Wrapper ref={dropdownRef}>
+      {/* <div className="" ref={dropdownRef}> */}
+      <input ref={inputRef} onClick={handleOpenOptions(true)} value={searchValue} onChange={handleSearchChange} />
 
-        {searchValue ? (
-          <button onClick={handleClearSelection}>
-            <i className="fa fa-times" aria-hidden="true"></i>
-          </button>
-        ) : (
-          <button onClick={handleOpenOptions()}>
-            {showDropdown ? (
-              <i className="fa fa-angle-up" aria-hidden="true"></i>
-            ) : (
-              <i className="fa fa-angle-down" aria-hidden="true"></i>
-            )}
-          </button>
-        )}
+      {searchValue ? (
+        <button onClick={handleClearSelection}>
+          <i className="fa fa-times" aria-hidden="true"></i>
+        </button>
+      ) : (
+        <button onClick={handleOpenOptions()}>
+          {showDropdown ? (
+            <i className="fa fa-angle-up" aria-hidden="true"></i>
+          ) : (
+            <i className="fa fa-angle-down" aria-hidden="true"></i>
+          )}
+        </button>
+      )}
 
-        {showDropdown && filteredOptions?.length ? (
-          <div className="dropdown-parent">
-            <ul role="listbox">
-              {filteredOptions.map(item => (
-                <li key={item.value} role="option" onClick={handleOptionClick(item)}>
-                  <div id="option-div">{item.formattedLabel || item.label}</div>
-                  {/* <input type="checkbox" id={`selectDropdown_${item.index}_${item.label}`} value={item.value} name={fieldName} checked={} />
+      {showDropdown && filteredOptions?.length ? (
+        <div className="dropdown-parent">
+          <ul role="listbox">
+            {filteredOptions.map(item => (
+              <li key={item.value} role="option" onClick={handleOptionClick(item)}>
+                <div id="option-div">{item.formattedLabel || item.label}</div>
+                {/* <input type="checkbox" id={`selectDropdown_${item.index}_${item.label}`} value={item.value} name={fieldName} checked={} />
                                                     <label for={`selectDropdown_${item.index}_${item.label}`}>{item.label}</label> */}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-      </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      {/* </div> */}
     </Wrapper>
   );
 }

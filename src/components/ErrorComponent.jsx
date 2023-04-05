@@ -14,6 +14,10 @@ const ErrorWrapper = styled.div`
     padding: 4px 12px 4px 8px;
     color: #af0404;
   }
+
+  span {
+    margin-left: 5px;
+  }
 `;
 
 function ErrorComponent(props) {

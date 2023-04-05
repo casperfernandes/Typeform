@@ -4,6 +4,8 @@ import { appContext } from '../appContext/AppProvider';
 
 const Wrapper = styled.div`
   color: white;
+  min-width: 250px;
+  max-width: fit-content;
 
   .remaining-selection {
     margin-bottom: 16px;
@@ -21,26 +23,23 @@ const Wrapper = styled.div`
   }
 
   input + label {
-    padding-left: 10px;
-    padding-right: 10px;
     display: flex;
     -webkit-box-align: center;
     align-items: center;
+    position: relative;
+    padding: 0px 0px 0px 10px;
     border-radius: 4px;
     background-color: rgba(255, 255, 255, 0.1);
     box-shadow: rgba(255, 255, 255, 0.6) 0px 0px 0px 1px inset;
     color: rgb(255, 255, 255);
-    max-width: 100%;
-    min-width: 75px;
+    width: 100%;
     min-height: 40px;
     outline: 0px;
-    padding-top: 4px;
-    padding-bottom: 4px;
     transition-duration: 0.1s;
     transition-property: background-color, color, border-color, opacity, box-shadow;
     transition-timing-function: ease-out;
-    width: 100%;
     cursor: pointer;
+    font-size: 20px;
   }
 
   input:not([disabled]) + label:hover {
@@ -60,7 +59,10 @@ const Wrapper = styled.div`
   input:checked + label:after {
     font-family: FontAwesome;
     content: '\f00c';
-    font-size: 14px;
+    font-size: 15px;
+    margin-left: 5px;
+    position: absolute;
+    right: 6px;
   }
 `;
 

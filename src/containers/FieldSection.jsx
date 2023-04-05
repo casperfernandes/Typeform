@@ -1,3 +1,5 @@
+import styled from 'styled-components';
+
 import { FIELD_TYPE, STORAGE_KEYS } from '../constants/Miscellaneous';
 
 import { getFromLocalStorage, setToLocalStorage } from '../services/StorageService';
@@ -8,6 +10,14 @@ import CustomInputField from '../components/CustomInputField';
 import CustomCheckbox from '../components/CustomCheckbox';
 import ErrorComponent from '../components/ErrorComponent';
 import SubmitButton from '../components/SubmitButton';
+
+const Wrapper = styled.div`
+  margin-top: 32px;
+
+  .submit-error {
+    margin-top: 16px;
+  }
+`;
 
 function FieldSection(props) {
   const {
@@ -91,15 +101,17 @@ function FieldSection(props) {
   }
 
   return (
-    <>
+    <Wrapper>
       {renderField()}
 
-      {error ? (
-        <ErrorComponent message={error} />
-      ) : (
-        <SubmitButton buttonText={buttonText} helperText={helperText} handleSubmit={handleSubmit} />
-      )}
-    </>
+      <div className="submit-error">
+        {error ? (
+          <ErrorComponent message={error} />
+        ) : (
+          <SubmitButton buttonText={buttonText} helperText={helperText} handleSubmit={handleSubmit} />
+        )}
+      </div>
+    </Wrapper>
   );
 }
 
