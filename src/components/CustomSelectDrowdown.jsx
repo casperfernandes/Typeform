@@ -5,21 +5,15 @@ import { appContext } from '../appContext/AppProvider';
 const Wrapper = styled.div`
   position: relative;
   color: rgb(255, 255, 255);
+  font-size: 30px;
 
   input {
     width: 100%;
-    padding: 0px 0px 8px;
-    fill: none;
+    padding: 0px 40px 8px 0px;
     border: none;
     outline: none;
-    border-radius: 0px;
-    transform: translateZ(0px);
-    font-size: 30px;
-    -webkit-font-smoothing: antialiased;
-    line-height: unset;
-    -webkit-text-fill-color: rgb(255, 255, 255);
-    /* animation: 1ms ease 0s 1 normal none running native-autofill-in; */
-    transition: background-color 1e8s ease 0s, box-shadow 0.1s ease-out 0s;
+    font-size: inherit;
+    color: inherit;
     box-shadow: rgba(255, 255, 255, 0.3) 0px 1px;
     background: transparent !important;
 
@@ -34,8 +28,9 @@ const Wrapper = styled.div`
     top: 2px;
     bottom: 0px;
     background: none;
+    outline: none;
     border: none;
-    font-size: 30px;
+    font-size: inherit;
     color: inherit;
   }
 
@@ -75,6 +70,8 @@ const Wrapper = styled.div`
     width: 100%;
     cursor: pointer;
     opacity: 1;
+    font-size: 16px;
+    line-height: 24px;
   }
 `;
 
@@ -95,7 +92,14 @@ function CustomSelectDropdown(props) {
   const dropdownRef = useRef();
   const modifyProgressBarRef = useRef(true);
 
+  function handleInputFocus() {
+    if (inputRef?.current) {
+      inputRef.current.focus({ preventScroll: true });
+    }
+  }
+
   function handleSearchChange(event) {
+    setShowDropdown(true);
     onFieldChange({ [fieldName]: defaultValue });
     setIsOptionSelected(false);
     setSearchValue(event.target.value);
@@ -103,6 +107,8 @@ function CustomSelectDropdown(props) {
 
   function handleOpenOptions(value) {
     return function eventFunction() {
+      handleInputFocus();
+
       if (value === true || value === false) {
         setShowDropdown(value);
       } else {
@@ -126,6 +132,8 @@ function CustomSelectDropdown(props) {
   }
 
   function handleClearSelection() {
+    handleInputFocus();
+
     onFieldChange({ [fieldName]: defaultValue });
     setSearchValue('');
     setShowDropdown(false);
@@ -133,9 +141,7 @@ function CustomSelectDropdown(props) {
   }
 
   useEffect(() => {
-    if (isFieldInView && inputRef.current) {
-      inputRef.current.focus();
-    }
+    handleInputFocus();
   }, [isFieldInView]);
 
   useEffect(() => {
@@ -207,8 +213,13 @@ function CustomSelectDropdown(props) {
 
   return (
     <Wrapper ref={dropdownRef}>
-      {/* <div className="" ref={dropdownRef}> */}
-      <input ref={inputRef} onClick={handleOpenOptions(true)} value={searchValue} onChange={handleSearchChange} />
+      <input
+        ref={inputRef}
+        placeholder="Type or select an option"
+        onClick={handleOpenOptions(true)}
+        value={searchValue}
+        onChange={handleSearchChange}
+      />
 
       {searchValue ? (
         <button onClick={handleClearSelection}>
@@ -237,7 +248,6 @@ function CustomSelectDropdown(props) {
           </ul>
         </div>
       ) : null}
-      {/* </div> */}
     </Wrapper>
   );
 }

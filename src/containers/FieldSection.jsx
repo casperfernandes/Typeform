@@ -10,6 +10,7 @@ import CustomInputField from '../components/CustomInputField';
 import CustomCheckbox from '../components/CustomCheckbox';
 import ErrorComponent from '../components/ErrorComponent';
 import SubmitButton from '../components/SubmitButton';
+import Loader from '../components/Loader';
 
 const Wrapper = styled.div`
   margin-top: 32px;
@@ -25,6 +26,7 @@ function FieldSection(props) {
     error,
     setError,
     handleSubmit,
+    isSubmitLoader,
     formDetails: { fieldName, fieldType, defaultValue, options, buttonText, helperText, requiredSelectionCount, countries }
   } = props;
 
@@ -108,7 +110,13 @@ function FieldSection(props) {
         {error ? (
           <ErrorComponent message={error} />
         ) : (
-          <SubmitButton buttonText={buttonText} helperText={helperText} handleSubmit={handleSubmit} />
+          <>
+            {isSubmitLoader ? (
+              <Loader />
+            ) : (
+              <SubmitButton buttonText={buttonText} helperText={helperText} handleSubmit={handleSubmit} />
+            )}
+          </>
         )}
       </div>
     </Wrapper>

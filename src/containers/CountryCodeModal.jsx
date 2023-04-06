@@ -93,7 +93,7 @@ function CountryCodeModal(props) {
     document.addEventListener('mousedown', handleClickOutside);
 
     if (inputRef.current) {
-      inputRef.current.focus();
+      inputRef.current.focus({ preventScroll: true });
     }
 
     return () => {

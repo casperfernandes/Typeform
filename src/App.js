@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { STORAGE_KEYS } from './constants/Miscellaneous';
 
-import { getFromLocalStorage, setToLocalStorage } from './services/StorageService';
+import { getFromLocalStorage, removeFromLocalStorage, setToLocalStorage } from './services/StorageService';
 
 import ProgressBar from './components/ProgressBar';
 import Header from './components/Header';
@@ -13,9 +13,20 @@ import FormElement from './containers/FormElement';
 import Form from './form';
 import { appContext } from './appContext/AppProvider';
 
-const WrapperDiv = styled.div`
-  padding: 0px 40px;
-  background-color: black;
+const Wrapper = styled.div`
+  .fieldSection {
+    padding: 0px 40px;
+  }
+
+  .thankYouSection {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-block;
+    color: white;
+    font-size: 24px;
+  }
 
   .singleField {
     display: flex;
@@ -23,14 +34,17 @@ const WrapperDiv = styled.div`
     max-width: 720px;
     margin: 0px auto;
     height: 100vh;
-    border: 1px solid red;
+    /* border: 1px solid red; */
     transition: transform 600ms ease 0s, opacity 300ms ease 0s;
     transform: ${props => (props.nextFieldIndex ? `translateY(${-100 * props.nextFieldIndex}vh)` : undefined)};
   }
 `;
 
 function App() {
-  const { dispatch } = useContext(appContext);
+  const {
+    state: { isFormSubmitted },
+    dispatch
+  } = useContext(appContext);
 
   const [nextFieldIndex, setNextFieldIndex] = useState(0);
   const [countries, setCountries] = useState(null);
@@ -86,25 +100,38 @@ function App() {
     window.history.scrollRestoration = 'manual';
   }, []);
 
+  useEffect(() => {
+    if (isFormSubmitted) {
+      setNextFieldIndex(0);
+      removeFromLocalStorage(STORAGE_KEYS.form);
+    }
+  }, [isFormSubmitted]);
+
   return (
-    <>
+    <Wrapper nextFieldIndex={nextFieldIndex}>
       <Header />
 
-      <ProgressBar />
+      {isFormSubmitted ? (
+        <p className="thankYouSection">All done! Thanks for your time.</p>
+      ) : (
+        <>
+          <ProgressBar />
 
-      <WrapperDiv nextFieldIndex={nextFieldIndex}>
-        {formContent.map((item, index) => (
-          <div key={index} id={`content_${index}`} className="singleField">
-            <FormElement
-              formDetails={item}
-              fieldIndex={index}
-              setNextFieldIndex={setNextFieldIndex}
-              lastFieldIndex={formContent.length - 1}
-            />
+          <div className="fieldSection">
+            {formContent.map((item, index) => (
+              <div key={index} id={`content_${index}`} className="singleField">
+                <FormElement
+                  formDetails={item}
+                  fieldIndex={index}
+                  setNextFieldIndex={setNextFieldIndex}
+                  lastFieldIndex={formContent.length - 1}
+                />
+              </div>
+            ))}
           </div>
-        ))}
-      </WrapperDiv>
-    </>
+        </>
+      )}
+    </Wrapper>
   );
 }
 

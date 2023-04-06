@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 
 import { getFromLocalStorage } from '../services/StorageService';
@@ -7,24 +8,34 @@ import { isValidField } from '../helpers/formValidation';
 
 import { STORAGE_KEYS } from '../constants/Miscellaneous';
 
+import { appContext } from '../appContext/AppProvider';
+
 import SubmitButton from '../components/SubmitButton';
 
 import FieldSection from './FieldSection';
 
-const QuestionWrapper = styled.div`
-  color: white;
-  font-size: 24px;
-  line-height: 32px;
-`;
+const ParentWrapper = styled.div`
+  width: 100%;
 
-const DescriptionWrapper = styled.div`
-  font-size: 20px;
-  line-height: 28px;
-  color: #ffffffb3;
-`;
+  .question {
+    color: white;
+    font-size: 24px;
+    line-height: 32px;
+  }
 
-const Spacer = styled.div`
-  margin-top: 10px;
+  .description {
+    font-size: 20px;
+    line-height: 28px;
+    color: #ffffffb3;
+    margin-top: 8px;
+  }
+
+  .note {
+    font-size: 20px;
+    line-height: 28px;
+    color: #ffffffb3;
+    margin-top: 16px;
+  }
 `;
 
 function FormElement(props) {
@@ -33,22 +44,54 @@ function FormElement(props) {
     fieldIndex,
     lastFieldIndex,
     formDetails,
-    formDetails: { question = '', description = '', fieldName = '', buttonText = '', helperText = '' }
+    formDetails: {
+      question = '',
+      description = '',
+      note = '',
+      fieldName = '',
+      buttonText = '',
+      helperText = '',
+      isSubmitForm = false
+    }
   } = props;
 
+  const { dispatch } = useContext(appContext);
+
   const [isFieldInView, setIsFieldInView] = useState(false);
+  const [submitLoader, setSubmitLoader] = useState(false);
   const [error, setError] = useState('');
 
   const fieldRef = useRef(null);
 
-  const isLastField = fieldIndex === lastFieldIndex;
+  async function handleFormSubmit(formToSubmit) {
+    try {
+      setSubmitLoader(true);
 
-  function onSubmit() {
+      const submitResponse = await axios({
+        url: 'https://eo3oi83n1j77wgp.m.pipedream.net',
+        method: 'POST',
+        data: formToSubmit
+      });
+
+      if (submitResponse?.status === 200) {
+        dispatch({ type: 'setIsFormSubmitted', payload: true });
+      }
+      console.log('submitResponse', submitResponse);
+    } catch (error) {
+      console.log('submitResponse', submitResponse);
+    } finally {
+      setSubmitLoader(false);
+    }
+  }
+
+  function onSubmit(formToSubmit) {
     const nextIndex = fieldIndex + 1;
 
     // Prevent transition once you reach last field
     if (nextIndex <= lastFieldIndex) {
       setNextFieldIndex(nextIndex);
+    } else {
+      handleFormSubmit(formToSubmit);
     }
   }
 
@@ -59,7 +102,7 @@ function FormElement(props) {
     const { isValid, error: errorMessage } = isValidField(currentFieldValue, formDetails);
 
     if (isValid && !errorMessage) {
-      onSubmit();
+      onSubmit(latestForm);
     } else {
       setError(errorMessage);
     }
@@ -92,36 +135,35 @@ function FormElement(props) {
 
   useEffect(() => {
     if (isFieldInView) {
-      if (!isLastField) {
+      if (!isSubmitForm) {
         document.addEventListener('keyup', onEnterPressed);
       }
     } else {
       document.removeEventListener('keyup', onEnterPressed);
     }
-  }, [isFieldInView, isLastField]);
+  }, [isFieldInView, isSubmitForm]);
 
   return (
-    <>
-      <div ref={fieldRef}>
-        {question ? <QuestionWrapper>{question}</QuestionWrapper> : null}
+    <ParentWrapper ref={fieldRef}>
+      {question ? <div className="question">{question}</div> : null}
 
-        {description ? <DescriptionWrapper>{description}</DescriptionWrapper> : null}
+      {description ? <div className="description">{description}</div> : null}
 
-        {fieldName ? (
-          <FieldSection
-            formDetails={formDetails}
-            isFieldInView={isFieldInView}
-            handleSubmit={handleSubmit}
-            error={error}
-            setError={setError}
-          />
-        ) : (
-          <SubmitButton buttonText={buttonText} helperText={helperText} handleSubmit={onSubmit} />
-        )}
-      </div>
+      {note ? <div className="note">{note}</div> : null}
 
-      <Spacer />
-    </>
+      {fieldName ? (
+        <FieldSection
+          formDetails={formDetails}
+          isFieldInView={isFieldInView}
+          handleSubmit={handleSubmit}
+          error={error}
+          setError={setError}
+          isSubmitLoader={submitLoader}
+        />
+      ) : (
+        <SubmitButton buttonText={buttonText} helperText={helperText} handleSubmit={onSubmit} />
+      )}
+    </ParentWrapper>
   );
 }
 
