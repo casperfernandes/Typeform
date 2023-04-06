@@ -170,13 +170,8 @@ function Form(countries) {
       countries,
       isPhone: true,
       isRequired: true,
-      buttonText: 'Submit',
-      helperText: (
-        <>
-          press
-          <strong>Cmd ⌘ + Enter ↵</strong>
-        </>
-      )
+      isSubmitForm: true,
+      buttonText: 'Submit'
     }
   ];
 }
