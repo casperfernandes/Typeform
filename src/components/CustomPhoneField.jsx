@@ -13,17 +13,11 @@ const Wrapper = styled.div`
   position: relative;
 
   .inputField {
-    color: white;
     padding: 0px 0px 8px;
-    background: none;
-    border: none;
-    outline: none;
     transform: translateZ(0px);
-    font-size: 30px;
-    box-shadow: rgba(255, 255, 255, 0.3) 0px 1px;
 
-    :focus {
-      box-shadow: rgb(255, 255, 255) 0px 2px;
+    @media (min-width: 992px) {
+      width: inherit;
     }
   }
 

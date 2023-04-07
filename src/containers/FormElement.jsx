@@ -19,22 +19,37 @@ const ParentWrapper = styled.div`
 
   .question {
     color: white;
-    font-size: 24px;
-    line-height: 32px;
+    font-size: 20px;
+    line-height: 28px;
+
+    @media (min-width: 992px) {
+      font-size: 24px;
+      line-height: 32px;
+    }
   }
 
   .description {
-    font-size: 20px;
-    line-height: 28px;
-    color: #ffffffb3;
     margin-top: 8px;
+    color: #ffffffb3;
+    font-size: 16px;
+    line-height: 24px;
+
+    @media (min-width: 992px) {
+      font-size: 20px;
+      line-height: 28px;
+    }
   }
 
   .note {
-    font-size: 20px;
-    line-height: 28px;
-    color: #ffffffb3;
     margin-top: 16px;
+    color: #ffffffb3;
+    font-size: 16px;
+    line-height: 24px;
+
+    @media (min-width: 992px) {
+      font-size: 20px;
+      line-height: 28px;
+    }
   }
 `;
 

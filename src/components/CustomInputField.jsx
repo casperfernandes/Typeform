@@ -5,19 +5,7 @@ import styled from 'styled-components';
 import { appContext } from '../appContext/AppProvider';
 
 const StyledInput = styled.input`
-  width: 100%;
-  color: white;
   padding: 0px 0px 8px;
-  border: none;
-  background: none;
-  outline: none;
-  font-size: 30px;
-  transition: background-color 1e8s ease 0s, box-shadow 0.1s ease-out 0s;
-  box-shadow: rgba(255, 255, 255, 0.3) 0px 1px;
-
-  :focus {
-    box-shadow: rgb(255, 255, 255) 0px 2px;
-  }
 `;
 
 function CustomInputField(props) {

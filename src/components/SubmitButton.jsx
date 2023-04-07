@@ -20,7 +20,12 @@ const SubmitWrapper = styled.div`
   }
 
   .helperText {
-    font-size: 12px;
+    display: none;
+
+    @media (min-width: 1024px) {
+      display: block;
+      font-size: 12px;
+    }
   }
 `;
 

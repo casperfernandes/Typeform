@@ -39,7 +39,14 @@ const Wrapper = styled.div`
     transition-property: background-color, color, border-color, opacity, box-shadow;
     transition-timing-function: ease-out;
     cursor: pointer;
-    font-size: 20px;
+    margin-right: 50px;
+    font-size: 16px;
+    line-height: 24px;
+
+    @media (min-width: 992px) {
+      font-size: 20px;
+      line-height: 28px;
+    }
   }
 
   input:not([disabled]) + label:hover {

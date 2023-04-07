@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+
 import { appContext } from '../appContext/AppProvider';
 
 const Wrapper = styled.div`
@@ -8,18 +9,7 @@ const Wrapper = styled.div`
   font-size: 30px;
 
   input {
-    width: 100%;
     padding: 0px 40px 8px 0px;
-    border: none;
-    outline: none;
-    font-size: inherit;
-    color: inherit;
-    box-shadow: rgba(255, 255, 255, 0.3) 0px 1px;
-    background: transparent !important;
-
-    :focus {
-      box-shadow: rgb(255, 255, 255) 0px 2px;
-    }
   }
 
   button {
@@ -39,6 +29,7 @@ const Wrapper = styled.div`
     position: absolute;
     width: 100%;
     background-color: black;
+    margin-top: 1px;
   }
 
   ul {
@@ -55,15 +46,14 @@ const Wrapper = styled.div`
     display: flex;
     -webkit-box-align: center;
     align-items: center;
-    border-radius: var(--sampler-theme-border-radius);
+    border-radius: 4px;
     background-color: rgb(26, 26, 26);
     box-shadow: rgba(255, 255, 255, 0.6) 0px 0px 0px 1px inset;
     max-width: 100%;
     min-width: 75px;
     min-height: 40px;
     outline: 0px;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding: 4px 0px 4px 10px;
     transition-duration: 0.1s;
     transition-property: background-color, color, border-color, opacity, box-shadow;
     transition-timing-function: ease-out;
