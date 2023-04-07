@@ -34,10 +34,10 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              // name: '[path][name].[ext]',
+              name: '[path][name].[ext]',
               // context: path.resolve(__dirname, "src/"),
               // outputPath: 'dist/',
-              publicPath: 'public',
+              publicPath: './public',
               useRelativePaths: true
             }
           }
