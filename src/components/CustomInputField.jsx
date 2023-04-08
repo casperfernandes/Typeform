@@ -22,7 +22,7 @@ function CustomInputField(props) {
   const modifyProgressBarRef = useRef(true);
 
   useEffect(() => {
-    if (isFieldInView && inputRef?.current) {
+    if (isFieldInView && inputRef?.current && window.innerWidth >= 992) {
       inputRef.current.focus({ preventScroll: true });
     }
   }, [isFieldInView]);

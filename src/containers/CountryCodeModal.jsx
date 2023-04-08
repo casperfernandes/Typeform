@@ -80,7 +80,7 @@ function CountryCodeModal(props) {
 
     document.addEventListener('mousedown', handleClickOutside);
 
-    if (inputRef.current) {
+    if (inputRef.current && window.innerWidth >= 992) {
       inputRef.current.focus({ preventScroll: true });
     }
 

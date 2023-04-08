@@ -83,7 +83,7 @@ function CustomSelectDropdown(props) {
   const modifyProgressBarRef = useRef(true);
 
   function handleInputFocus() {
-    if (inputRef?.current) {
+    if (inputRef?.current && window.innerWidth >= 992) {
       inputRef.current.focus({ preventScroll: true });
     }
   }
